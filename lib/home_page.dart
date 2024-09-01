@@ -11,7 +11,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   TextEditingController nameController = TextEditingController();
   TextEditingController markController = TextEditingController();
-  BooksDao dau =BooksDao();
+  BooksDao dau = BooksDao();
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +20,7 @@ class _HomePageState extends State<HomePage> {
         title: Text("Books Entry Page"),
       ),
       body: Container(
-        margin: EdgeInsets.only(left: 20,right: 20),
+        margin: EdgeInsets.only(left: 20, right: 20),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -51,7 +51,9 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
             ),
-            SizedBox(height: 30,),
+            SizedBox(
+              height: 30,
+            ),
             TextFormField(
               controller: markController,
               textAlign: TextAlign.start,
@@ -61,7 +63,7 @@ class _HomePageState extends State<HomePage> {
               decoration: InputDecoration(
                 fillColor: Colors.white,
                 filled: true,
-                hintText: "Add your roll number",
+                hintText: "Add your roll number - required INT",
                 labelStyle: TextStyle(
                   fontSize: 17,
                 ),
@@ -80,48 +82,59 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
             ),
-            SizedBox(height: 30,),
+            SizedBox(
+              height: 30,
+            ),
             Container(
               width: 100,
               height: 50,
-              child: RaisedButton(onPressed: (){
-
-                dau.insertBooks(Books(name: nameController.text,rollNo: int.parse(markController.text)));
-nameController.clear();markController.clear();
-
-              },
-                color: Colors.blue,
-                child: Text("Submit",style: TextStyle(color: Colors.white),),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
-                
-
-
-
-
+              child: OutlinedButton(
+                onPressed: () {
+                  dau.insertBooks(Books(
+                      name: nameController.text,
+                      rollNo: int.parse(markController.text)));
+                  nameController.clear();
+                  markController.clear();
+                },
+                style: OutlinedButton.styleFrom(
+                  backgroundColor: Colors.blue, // Màu nền của nút
+                  side: BorderSide(
+                      color: Colors.white, width: 2), // Màu và độ dày của viền
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8), // Bo góc cho nút
+                  ),
+                ),
+                child: Text(
+                  "Submit",
+                  style: TextStyle(color: Colors.white),
+                ),
               ),
             ),
-
-            SizedBox(height: 30,),
+            SizedBox(
+              height: 30,
+            ),
             Container(
               width: 120,
               height: 50,
-              child: RaisedButton(onPressed: (){
-                
-                Navigator.push(context, MaterialPageRoute(builder: (context) => BooksList()));
-
-
-              },
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
-                color: Colors.blue,
-                child: Text("See the List",style: TextStyle(color: Colors.white),),
-
-
-
-
-
+              child: OutlinedButton(
+                onPressed: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => BooksList()));
+                },
+                style: OutlinedButton.styleFrom(
+                  backgroundColor: Colors.blue, // Màu nền của nút
+                  side: BorderSide(
+                      color: Colors.white, width: 2), // Màu và độ dày của viền
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8), // Bo góc cho nút
+                  ),
+                ),
+                child: Text(
+                  "See the List",
+                  style: TextStyle(color: Colors.white), // Màu văn bản
+                ),
               ),
             )
-
           ],
         ),
       ),

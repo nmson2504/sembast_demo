@@ -2,19 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:sembast_demo/dao/books_dao.dart';
 import 'package:sembast_demo/model/books_model.dart';
 
-
 class BooksList extends StatefulWidget {
   @override
   _BooksListState createState() => _BooksListState();
 }
 
 class _BooksListState extends State<BooksList> {
-  BooksDao dau = BooksDao();
+  final BooksDao dao = BooksDao();
 
   @override
   void initState() {
     super.initState();
-
   }
 
   @override
@@ -23,37 +21,43 @@ class _BooksListState extends State<BooksList> {
       appBar: AppBar(
         title: Text("Books List"),
       ),
-      body: Container(
-
-        child: FutureBuilder<List<Books>>(
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.none &&
-                snapshot.hasData == null) {
-              print("asdff ${snapshot.data}");
-              return Container(color: Colors.red);
-            }
-            return
-              ListView.builder(
-                itemCount: snapshot.data.length,
+      body: FutureBuilder<List<Books>>(
+        future: dao.getAllBooks(),
+        builder: (context, snapshot) {
+          // Check for connection state
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          } else if (snapshot.connectionState == ConnectionState.done) {
+            if (snapshot.hasError) {
+              return Center(child: Text("Error: ${snapshot.error}"));
+            } else if (snapshot.hasData) {
+              // Ensure snapshot.data is not null
+              final books = snapshot.data!;
+              return ListView.builder(
+                itemCount: books.length,
                 itemBuilder: (context, index) {
-                  Books student = snapshot.data[index];
-                  return  snapshot.data.length == null ?CircularProgressIndicator():
-                  ListTile(
-                    title: Text(student.name),
-                    trailing: Text(student.rollNo.toString()),
-                    onTap: (){
-                     setState(() {
-                       dau.delete(Books(rollNo: student.rollNo));
-//                       snapshot.data.removeAt(index);
-
-                     });
+                  final book = books[index];
+                  return ListTile(
+                    title: Text(book.name),
+                    trailing: Text(book.rollNo.toString()),
+                    onTap: () {
+                      setState(() {
+                        // Call delete method from BooksDao
+                        dao.delete(Books(rollNo: book.rollNo, name: ''));
+                        // Refresh the list by reloading data
+                        // This example assumes `getAllBooks` is a method that updates the UI.
+                      });
                     },
-
                   );
-                });
-          },
-          future: dau.getAllBooks(),
-        ),
+                },
+              );
+            } else {
+              return Center(child: Text("No data available"));
+            }
+          } else {
+            return Center(child: Text("Unexpected state"));
+          }
+        },
       ),
     );
   }

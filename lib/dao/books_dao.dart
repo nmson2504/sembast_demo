@@ -4,7 +4,7 @@ import 'package:sembast_demo/model/books_model.dart';
 
 
 
-class BooksDao{
+  class BooksDao{
   static const String folderName = "Books";
   final _booksFolder = intMapStoreFactory.store(folderName);
 

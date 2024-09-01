@@ -5,8 +5,8 @@ class Books {
   String name;
 
   Books({
-    this.rollNo,
-    this.name,
+    required this.rollNo,
+    required this.name,
   });
 
   factory Books.fromJson(Map<String, dynamic> json) => Books(
